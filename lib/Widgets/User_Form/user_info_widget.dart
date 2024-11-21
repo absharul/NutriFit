@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import '../../Services/Calucations/calculation_helper.dart';
 import '../../Utils/constants.dart';
 
+
 class UserFormWidget extends StatefulWidget {
-  const UserFormWidget({Key? key}) : super(key: key);
+  const UserFormWidget({Key? key, required this.onFormSubmit}) : super(key: key);
+
+  final void Function(Map<String, dynamic>, Map<String, List<int>>) onFormSubmit;
 
   @override
   _UserFormWidgetState createState() => _UserFormWidgetState();
@@ -19,130 +24,183 @@ class _UserFormWidgetState extends State<UserFormWidget> {
   String selectedActivity = "Sedentary";
   String selectedGender = "Male";
 
+  final _formKey = GlobalKey<FormState>(); // Global key for form validation
+
+  // Form Validation
+  bool _validateForm() {
+    if (!_formKey.currentState!.validate()) {
+      return false; // If validation fails, return false
+    }
+    return true; // If all fields are valid, return true
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // Name input
-        Padding(
-          padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0),
-          child: TextField(
-            controller: nameController,
-            decoration: const InputDecoration(
-              hintText: 'Name',
-              border: OutlineInputBorder(),
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          // Name input
+          Padding(
+            padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0),
+            child: TextFormField(
+              controller: nameController,
+              decoration: const InputDecoration(
+                hintText: 'Name',
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter your name';
+                }
+                return null;
+              },
             ),
           ),
-        ),
-        // Height input
-        Padding(
-          padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0),
-          child: TextField(
-            controller: heightController,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
-              hintText: 'Height (in cm)',
-              border: OutlineInputBorder(),
+          // Height input
+          Padding(
+            padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0),
+            child: TextFormField(
+              controller: heightController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                hintText: 'Height (in cm)',
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter your height';
+                }
+                if (int.tryParse(value) == null) {
+                  return 'Please enter a valid number for height';
+                }
+                return null;
+              },
             ),
           ),
-        ),
-        // Weight input
-        Padding(
-          padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0),
-          child: TextField(
-            controller: weightController,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
-              hintText: 'Weight (in kg)',
-              border: OutlineInputBorder(),
+          // Weight input
+          Padding(
+            padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0),
+            child: TextFormField(
+              controller: weightController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                hintText: 'Weight (in kg)',
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter your weight';
+                }
+                if (int.tryParse(value) == null) {
+                  return 'Please enter a valid number for weight';
+                }
+                return null;
+              },
             ),
           ),
-        ),
-        // Age input
-        Padding(
-          padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0),
-          child: TextField(
-            controller: ageController,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
-              hintText: 'Age',
-              border: OutlineInputBorder(),
+          // Age input
+          Padding(
+            padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0),
+            child: TextFormField(
+              controller: ageController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                hintText: 'Age',
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter your age';
+                }
+                if (int.tryParse(value) == null) {
+                  return 'Please enter a valid number for age';
+                }
+                return null;
+              },
             ),
           ),
-        ),
-        // Gender selection
-        Padding(
-          padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0),
-          child: DropdownButtonFormField<String>(
-            value: selectedGender,
-            decoration: const InputDecoration(
-              hintText: 'Gender',
-              border: OutlineInputBorder(),
-            ),
-            onChanged: (String? newValue) {
-              setState(() {
-                selectedGender = newValue!;
-              });
-            },
-            items: ["Male", "Female"]
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-          ),
-        ),
-        // Activity level selection
-        Padding(
-          padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0),
-          child: DropdownButtonFormField<String>(
-            value: selectedActivity,
-            decoration: const InputDecoration(
-              hintText: 'Activity Level',
-              border: OutlineInputBorder(),
-            ),
-            onChanged: (String? newValue) {
-              setState(() {
-                selectedActivity = newValue!;
-              });
-            },
-            items: ["Sedentary", "LightlyActive", "ModeratelyActive", "VeryActive"]
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-          ),
-        ),
-      Padding(
-          padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0),
-          child: ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: WidgetStateProperty.all<Color>(Colors.blue),
-              minimumSize: WidgetStateProperty.all(const Size(200, 50)),
-            ),
-            onPressed: () {
-              // Add functionality when the button is pressed
-              print("Name: ${nameController.text}");
-              print("Height: ${heightController.text}");
-              print("Weight: ${weightController.text}");
-              print("Age: ${ageController.text}");
-              print("Activity: $selectedActivity");
-            },
-            child: Center(
-              child: Text('Check', style: appFont),
+          // Gender selection
+          Padding(
+            padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0),
+            child: DropdownButtonFormField<String>(
+              value: selectedGender,
+              decoration: const InputDecoration(
+                hintText: 'Gender',
+                border: OutlineInputBorder(),
+              ),
+              onChanged: (String? newValue) {
+                setState(() {
+                  selectedGender = newValue!;
+                });
+              },
+              items: ["Male", "Female"]
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
             ),
           ),
-        ),
-      ],
+          // Activity level selection
+          Padding(
+            padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0),
+            child: DropdownButtonFormField<String>(
+              value: selectedActivity,
+              decoration: const InputDecoration(
+                hintText: 'Activity Level',
+                border: OutlineInputBorder(),
+              ),
+              onChanged: (String? newValue) {
+                setState(() {
+                  selectedActivity = newValue!;
+                });
+              },
+              items: ["Sedentary", "LightlyActive", "ModeratelyActive", "VeryActive"]
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+          ),
+          // Submit Button
+          Padding(
+            padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0),
+            child: ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: WidgetStateProperty.all<Color>(Colors.blue),
+                minimumSize: WidgetStateProperty.all(const Size(200, 50)),
+              ),
+              onPressed: () {
+                if (_validateForm()) {
+                  Map<String, dynamic> userData = getUserData();
+                  Map<String, List<int>> results = calculateCaloriesAndProtein(
+                    age: userData['age'],
+                    activityLevel: ActivityLevel.values.firstWhere(
+                          (e) => e.toString().split('.').last == userData['activityLevel'],
+                    ),
+                    gender: userData['gender'],
+                    height: userData['height'],
+                    weight: userData['weight'],
+                  );
+                  widget.onFormSubmit(userData, results); // Pass data to parent widget
+                }
+              },
+              child: Center(
+                child: Text('Check', style: appFont),
+            ),
+          ),
+          ),
+        ],
+      ),
     );
   }
 
-  // Return values for calculation
   Map<String, dynamic> getUserData() {
-    return {
+    final userData = {
       'name': nameController.text,
       'height': int.tryParse(heightController.text) ?? 0,
       'weight': int.tryParse(weightController.text) ?? 0,
@@ -150,5 +208,9 @@ class _UserFormWidgetState extends State<UserFormWidget> {
       'activityLevel': selectedActivity,
       'gender': selectedGender,
     };
+
+    print('User Data: $userData');  // Debugging line
+    return userData;
   }
+
 }

@@ -1,19 +1,25 @@
+//home_screen.dart
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../Widgets/User_Form/user_info_widget.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
+class _HomeScreenState extends ConsumerState<HomeScreen>
     with SingleTickerProviderStateMixin {
   int _selectedIndex = 0;
   late TabController _tabController;
+
+  Map<String, dynamic>? userData;
+  Map<String, List<int>>? calculationResults;
 
   @override
   void initState() {
@@ -28,6 +34,18 @@ class _HomeScreenState extends State<HomeScreen>
     });
   }
 
+  void _handleFormSubmit(Map<String, dynamic> userData, Map<String, List<int>> results) {
+    print('Form Submitted');
+    print('User Data: $userData');
+    print('Calculation Results: $results');
+
+    setState(() {
+      this.userData = userData;
+      this.calculationResults = results;
+    });
+  }
+
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -39,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.redAccent,
+        backgroundColor: Colors.black,
         title: Text(
           "NutriFit",
           style: GoogleFonts.inter(
@@ -50,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen>
         ),
         bottom: TabBar(
           indicatorWeight: 3.0,
-          indicatorColor: Colors.blue,
+          indicatorColor: Colors.yellowAccent,
           indicatorSize: TabBarIndicatorSize.tab,
           unselectedLabelColor: Colors.white,
           labelColor: Colors.white,
@@ -63,13 +81,59 @@ class _HomeScreenState extends State<HomeScreen>
       ),
       body: TabBarView(
         controller: _tabController,
-        children: const [
+        children:  [
           Column(
             children: [
-              UserFormWidget(), // Content for Tab 1
+              UserFormWidget(onFormSubmit: _handleFormSubmit),
+              if (userData != null && calculationResults != null) ...[
+                Card(
+                  elevation: 5,
+                  margin: const EdgeInsets.all(16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    height: 200,
+                  child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+    child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+    Text(
+    'Hello, ${userData!['name']}!',
+    style: GoogleFonts.inter(
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+    color: Colors.black,
+    ),
+    ),
+    const SizedBox(height: 10),
+    Text(
+    'Calories: ${calculationResults!['Calorie']?.join(' - ')}',
+    style: const TextStyle(
+    fontSize: 16,
+    color: Colors.black,
+    ),
+    ),
+    const SizedBox(height: 5),
+    Text(
+    'Protein: ${calculationResults!['Protein']?.join(' - ')}',
+    style: const TextStyle(
+    fontSize: 16,
+    color: Colors.black,
+    ),
+    ),
+    ],
+    ),
+    ),
+                  ),
+
+                ),
+              ],
             ],
           ),
-          Center(
+          const Center(
             child: Text('Tab 2 Content'), // Content for Tab 2
           ),
         ],
@@ -79,15 +143,15 @@ class _HomeScreenState extends State<HomeScreen>
           // Action for FAB
         },
         shape: const CircleBorder(),
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.yellowAccent,
         child: const Icon(
           Icons.add,
-          color: Colors.white,
+          color: Colors.black,
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
-        color: Colors.redAccent,
+        color: Colors.black,
         shape: const CircularNotchedRectangle(),
         notchMargin: 8.0,
         child: Row(
@@ -106,19 +170,19 @@ class _HomeScreenState extends State<HomeScreen>
                       duration: const Duration(milliseconds: 100),
                       curve: Curves.easeOut,
                       transform: Matrix4.identity()..scale(scale),
-                      child: const Column(
+                      child: Column(
                         children: [
                           Icon(
                             Icons.home,
-                            color: Colors.white,
+                            color: _selectedIndex == 0 ? Colors.yellowAccent : Colors.white,
                             size: 20,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 2.0,
                           ),
                           Text(
                             'Home',
-                            style: TextStyle(color: Colors.white, fontSize: 10),
+                            style: TextStyle(color: _selectedIndex == 0 ? Colors.yellowAccent : Colors.white, fontSize: 10),
                           )
                         ],
                       )),
@@ -141,19 +205,19 @@ class _HomeScreenState extends State<HomeScreen>
                     duration: const Duration(milliseconds: 100),
                     curve: Curves.easeOut,
                     transform: Matrix4.identity()..scale(scale),
-                    child: const Column(
+                    child:  Column(
                       children: [
                         Icon(
                           Icons.sports_gymnastics_outlined,
-                          color: Colors.white,
+                          color: _selectedIndex == 1 ? Colors.yellowAccent : Colors.white,
                           size: 20,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 2.0,
                         ),
                         Text(
                           'Workout',
-                          style: TextStyle(color: Colors.white, fontSize: 10),
+                          style: TextStyle(color: _selectedIndex == 1 ? Colors.yellowAccent : Colors.white, fontSize: 10),
                         )
                       ],
                     ),
@@ -179,19 +243,19 @@ class _HomeScreenState extends State<HomeScreen>
                     duration: const Duration(milliseconds: 100),
                     curve: Curves.easeOut,
                     transform: Matrix4.identity()..scale(scale),
-                    child: const Column(
+                    child: Column(
                       children: [
                         Icon(
                           Icons.bar_chart,
-                          color: Colors.white,
+                          color: _selectedIndex == 2 ? Colors.yellowAccent : Colors.white,
                           size: 20,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 2.0,
                         ),
                         Text(
                           'Progress',
-                          style: TextStyle(color: Colors.white, fontSize: 10),
+                          style: TextStyle(color: _selectedIndex == 2 ? Colors.yellowAccent : Colors.white, fontSize: 10),
                         )
                       ],
                     ),
@@ -216,19 +280,19 @@ class _HomeScreenState extends State<HomeScreen>
                       duration: const Duration(milliseconds: 100),
                       curve: Curves.easeOut,
                       transform: Matrix4.identity()..scale(scale),
-                      child: const Column(
+                      child: Column(
                         children: [
                           Icon(
                             Icons.person,
-                            color: Colors.white,
+                            color: _selectedIndex == 3 ? Colors.yellowAccent : Colors.white,
                             size: 20,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 2.0,
                           ),
                           Text(
                             'Profile',
-                            style: TextStyle(color: Colors.white, fontSize: 10),
+                            style: TextStyle(color: _selectedIndex == 3 ? Colors.yellowAccent : Colors.white, fontSize: 10),
                           )
                         ],
                       )),
