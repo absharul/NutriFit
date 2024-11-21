@@ -45,10 +45,13 @@ class _UserFormWidgetState extends State<UserFormWidget> {
             padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0),
             child: TextFormField(
               controller: nameController,
-              decoration: const InputDecoration(
+              decoration:  InputDecoration(
                 hintText: 'Name',
-                border: OutlineInputBorder(),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15)
+                ),
               ),
+              style: const TextStyle(fontSize: 12.0),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your name';
@@ -63,10 +66,13 @@ class _UserFormWidgetState extends State<UserFormWidget> {
             child: TextFormField(
               controller: heightController,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 hintText: 'Height (in cm)',
-                border: OutlineInputBorder(),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15)
+                ),
               ),
+              style: const TextStyle(fontSize: 12.0),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your height';
@@ -84,10 +90,13 @@ class _UserFormWidgetState extends State<UserFormWidget> {
             child: TextFormField(
               controller: weightController,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 hintText: 'Weight (in kg)',
-                border: OutlineInputBorder(),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15)
+                ),
               ),
+              style: const TextStyle(fontSize: 12.0),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your weight';
@@ -105,10 +114,13 @@ class _UserFormWidgetState extends State<UserFormWidget> {
             child: TextFormField(
               controller: ageController,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 hintText: 'Age',
-                border: OutlineInputBorder(),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15)
+                ),
               ),
+              style: const TextStyle(fontSize: 12.0),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your age';
@@ -125,10 +137,13 @@ class _UserFormWidgetState extends State<UserFormWidget> {
             padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0),
             child: DropdownButtonFormField<String>(
               value: selectedGender,
-              decoration: const InputDecoration(
+              decoration:  InputDecoration(
                 hintText: 'Gender',
-                border: OutlineInputBorder(),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15)
+                ),
               ),
+              style: const TextStyle(fontSize: 12.0,color: Colors.black),
               onChanged: (String? newValue) {
                 setState(() {
                   selectedGender = newValue!;
@@ -148,10 +163,13 @@ class _UserFormWidgetState extends State<UserFormWidget> {
             padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0),
             child: DropdownButtonFormField<String>(
               value: selectedActivity,
-              decoration: const InputDecoration(
+              decoration:  InputDecoration(
                 hintText: 'Activity Level',
-                border: OutlineInputBorder(),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15)
+                ),
               ),
+              style: const TextStyle(fontSize: 12.0,color: Colors.black),
               onChanged: (String? newValue) {
                 setState(() {
                   selectedActivity = newValue!;
@@ -172,7 +190,8 @@ class _UserFormWidgetState extends State<UserFormWidget> {
             child: ElevatedButton(
               style: ButtonStyle(
                 backgroundColor: WidgetStateProperty.all<Color>(Colors.blue),
-                minimumSize: WidgetStateProperty.all(const Size(200, 50)),
+                minimumSize: WidgetStateProperty.all(const Size(50, 40)),
+                maximumSize: WidgetStateProperty.all(const Size(150, 40))
               ),
               onPressed: () {
                 if (_validateForm()) {
