@@ -1,12 +1,13 @@
-//home_screen.dart
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nutrifit/Screens/check_screen.dart';
 import 'package:nutrifit/Screens/meal_screen.dart';
-import '../Widgets/User_Form/user_info_widget.dart';
+import 'package:nutrifit/Screens/profile_screen.dart';
+import 'package:nutrifit/Screens/progress_screen.dart';
+import 'package:nutrifit/Screens/workout_screen.dart';
+import '../Widgets/User_Form/add_meal_dialog.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -15,30 +16,40 @@ class HomeScreen extends ConsumerStatefulWidget {
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends ConsumerState<HomeScreen>
-    with SingleTickerProviderStateMixin {
-  int _selectedIndex = 0;
+class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProviderStateMixin {
+  int _selectedBottomNavIndex = 0; // Tracks BottomNavBar selection
   late TabController _tabController;
 
+  final List<Widget> _bottomNavScreens = [
+    const HomeScreen(),  // This will be where the TabBar is
+    const WorkoutScreen(),
+    const ProgressScreen(),
+    const ProfileScreen(),
+  ];
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 2, vsync: this); // 2 Tabs for HomeScreen
   }
 
-  void _onItemTapped(int index) {
+  void _showAddMealDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AddMealDialog();
+      },
+    );
+  }
+
+  void _onBottomNavItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      _selectedBottomNavIndex = index;
     });
   }
 
-
-
   @override
   void dispose() {
-    // TODO: implement dispose
     _tabController.dispose();
     super.dispose();
   }
@@ -46,7 +57,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: _selectedBottomNavIndex == 0
+          ? AppBar(
         backgroundColor: Colors.black,
         title: Text(
           "NutriFit",
@@ -57,29 +69,30 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               fontWeight: FontWeight.bold),
         ),
         bottom: TabBar(
+          controller: _tabController,
           indicatorWeight: 3.0,
           indicatorColor: Colors.yellowAccent,
           indicatorSize: TabBarIndicatorSize.tab,
           unselectedLabelColor: Colors.white,
           labelColor: Colors.white,
-          controller: _tabController,
           tabs: const [
-            Tab(text: 'Home'), // First Tab
+            Tab(text: 'Check'), // First Tab
             Tab(text: 'Meals'), // Second Tab
           ],
         ),
-      ),
-      body: TabBarView(
+      )
+          : null, // No AppBar when not on HomeScreen
+      body: _selectedBottomNavIndex == 0
+          ? TabBarView(
         controller: _tabController,
         children: [
-          CheckScreen(),
+          const CheckScreen(),
           MealSection(),
         ],
-      ),
+      )
+          : _bottomNavScreens[_selectedBottomNavIndex], // Show other screens based on BottomNav selection
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Action for FAB
-        },
+        onPressed: _showAddMealDialog,
         shape: const CircleBorder(),
         backgroundColor: Colors.yellowAccent,
         child: const Icon(
@@ -96,178 +109,78 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             // Home Button
-            TweenAnimationBuilder(
-              tween: Tween<double>(
-                begin: 1.0,
-                end: _selectedIndex == 0 ? 1.2 : 1.0,
-              ),
-              duration: const Duration(milliseconds: 150),
-              builder: (context, scale, child) {
-                return IconButton(
-                  icon: AnimatedContainer(
-                      duration: const Duration(milliseconds: 100),
-                      curve: Curves.easeOut,
-                      transform: Matrix4.identity()..scale(scale),
-                      child: Column(
-                        children: [
-                          Icon(
-                            Icons.home,
-                            color: _selectedIndex == 0
-                                ? Colors.yellowAccent
-                                : Colors.white,
-                            size: 20,
-                          ),
-                          const SizedBox(
-                            height: 2.0,
-                          ),
-                          Text(
-                            'Home',
-                            style: TextStyle(
-                                color: _selectedIndex == 0
-                                    ? Colors.yellowAccent
-                                    : Colors.white,
-                                fontSize: 10),
-                          )
-                        ],
-                      )),
-                  onPressed: () {
-                    _onItemTapped(0); // Navigate to Home tab
-                  },
-                );
-              },
+            _buildBottomNavItem(
+              icon: Icons.home,
+              label: 'Home',
+              index: 0,
             ),
-            // Gymnastics Button
-            TweenAnimationBuilder(
-              tween: Tween<double>(
-                begin: 1.0,
-                end: _selectedIndex == 1 ? 1.2 : 1.0,
-              ),
-              duration: const Duration(milliseconds: 150),
-              builder: (context, scale, child) {
-                return IconButton(
-                  icon: AnimatedContainer(
-                    duration: const Duration(milliseconds: 100),
-                    curve: Curves.easeOut,
-                    transform: Matrix4.identity()..scale(scale),
-                    child: Column(
-                      children: [
-                        Icon(
-                          Icons.sports_gymnastics_outlined,
-                          color: _selectedIndex == 1
-                              ? Colors.yellowAccent
-                              : Colors.white,
-                          size: 20,
-                        ),
-                        const SizedBox(
-                          height: 2.0,
-                        ),
-                        Text(
-                          'Workout',
-                          style: TextStyle(
-                              color: _selectedIndex == 1
-                                  ? Colors.yellowAccent
-                                  : Colors.white,
-                              fontSize: 10),
-                        )
-                      ],
-                    ),
-                  ),
-                  onPressed: () {
-                    _onItemTapped(1); // Navigate to Meals tab
-                  },
-                );
-              },
+            // Workout Button
+            _buildBottomNavItem(
+              icon: Icons.sports_gymnastics_outlined,
+              label: 'Workout',
+              index: 1,
             ),
             const SizedBox(width: 48), // Space for the FAB
-
-            // Chart Button
-            TweenAnimationBuilder(
-              tween: Tween<double>(
-                begin: 1.0,
-                end: _selectedIndex == 2 ? 1.2 : 1.0,
-              ),
-              duration: const Duration(milliseconds: 150),
-              builder: (context, scale, child) {
-                return IconButton(
-                  icon: AnimatedContainer(
-                    duration: const Duration(milliseconds: 100),
-                    curve: Curves.easeOut,
-                    transform: Matrix4.identity()..scale(scale),
-                    child: Column(
-                      children: [
-                        Icon(
-                          Icons.bar_chart,
-                          color: _selectedIndex == 2
-                              ? Colors.yellowAccent
-                              : Colors.white,
-                          size: 20,
-                        ),
-                        const SizedBox(
-                          height: 2.0,
-                        ),
-                        Text(
-                          'Progress',
-                          style: TextStyle(
-                              color: _selectedIndex == 2
-                                  ? Colors.yellowAccent
-                                  : Colors.white,
-                              fontSize: 10),
-                        )
-                      ],
-                    ),
-                  ),
-                  onPressed: () {
-                    _onItemTapped(
-                        2); // Navigate to Chart tab (or any other tab)
-                  },
-                );
-              },
+            // Progress Button
+            _buildBottomNavItem(
+              icon: Icons.bar_chart,
+              label: 'Progress',
+              index: 2,
             ),
             // Profile Button
-            TweenAnimationBuilder(
-              tween: Tween<double>(
-                begin: 1.0,
-                end: _selectedIndex == 3 ? 1.2 : 1.0,
-              ),
-              duration: const Duration(milliseconds: 150),
-              builder: (context, scale, child) {
-                return IconButton(
-                  icon: AnimatedContainer(
-                      duration: const Duration(milliseconds: 100),
-                      curve: Curves.easeOut,
-                      transform: Matrix4.identity()..scale(scale),
-                      child: Column(
-                        children: [
-                          Icon(
-                            Icons.person,
-                            color: _selectedIndex == 3
-                                ? Colors.yellowAccent
-                                : Colors.white,
-                            size: 20,
-                          ),
-                          const SizedBox(
-                            height: 2.0,
-                          ),
-                          Text(
-                            'Profile',
-                            style: TextStyle(
-                                color: _selectedIndex == 3
-                                    ? Colors.yellowAccent
-                                    : Colors.white,
-                                fontSize: 10),
-                          )
-                        ],
-                      )),
-                  onPressed: () {
-                    _onItemTapped(
-                        3); // Navigate to Profile tab (or any other tab)
-                  },
-                );
-              },
+            _buildBottomNavItem(
+              icon: Icons.person,
+              label: 'Profile',
+              index: 3,
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildBottomNavItem({
+    required IconData icon,
+    required String label,
+    required int index,
+  }) {
+    return TweenAnimationBuilder(
+      tween: Tween<double>(
+        begin: 1.0,
+        end: _selectedBottomNavIndex == index ? 1.2 : 1.0,
+      ),
+      duration: const Duration(milliseconds: 150),
+      builder: (context, scale, child) {
+        return IconButton(
+          icon: AnimatedContainer(
+            duration: const Duration(milliseconds: 100),
+            curve: Curves.easeOut,
+            transform: Matrix4.identity()..scale(scale),
+            child: Column(
+              children: [
+                Icon(
+                  icon,
+                  color: _selectedBottomNavIndex == index
+                      ? Colors.yellowAccent
+                      : Colors.white,
+                  size: 20,
+                ),
+                const SizedBox(height: 2.0),
+                Text(
+                  label,
+                  style: TextStyle(
+                    color: _selectedBottomNavIndex == index
+                        ? Colors.yellowAccent
+                        : Colors.white,
+                    fontSize: 10,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          onPressed: () => _onBottomNavItemTapped(index),
+        );
+      },
     );
   }
 }
