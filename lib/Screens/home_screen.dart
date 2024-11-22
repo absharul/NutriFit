@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nutrifit/Screens/check_screen.dart';
+import 'package:nutrifit/Screens/meal_screen.dart';
 import '../Widgets/User_Form/user_info_widget.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -72,9 +73,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         controller: _tabController,
         children: [
           CheckScreen(),
-          const Center(
-            child: Text('Tab 2 Content'), // Content for Tab 2
-          ),
+          MealSection(),
         ],
       ),
       floatingActionButton: FloatingActionButton(
