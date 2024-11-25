@@ -1,8 +1,8 @@
 import 'package:hive/hive.dart';
 
-part 'user_meals.g.dart'; // For generated code
+part 'user_meals.g.dart'; // For the generated adapter
 
-@HiveType(typeId: 0)
+@HiveType(typeId: 1) // Unique type ID for AddMealBox
 class AddMealBox extends HiveObject {
   @HiveField(0)
   String mealname;

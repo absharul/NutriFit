@@ -137,33 +137,6 @@ class _CheckScreenState extends ConsumerState<CheckScreen> {
                                   minimumSize: WidgetStateProperty.all(const Size(0, 0)),
                                   maximumSize: WidgetStateProperty.all(const Size(150, 30)),
                                 ),
-                                // onPressed: () {
-                                //   // Safely access the first value in the list, fallback to 0 if null
-                                //   final kcal = calculationResults?['Calorie']?.first ?? 0;
-                                //   final protein = calculationResults?['Protein']?.first.toDouble() ?? 0.0;
-                                //
-                                //   // Create a new UserNutrition instance
-                                //   final newData = UserNutrition(
-                                //     name: userData!['name']?.trim() ?? 'Unnamed user',
-                                //     kcal: kcal,
-                                //     protein: protein,
-                                //   );
-                                //
-                                //   // Check if the user already exists in the box by their name (using 'put' to store by key)
-                                //   if (nutritionBox.containsKey(userData!['name'])) {
-                                //     // Show SnackBar if the user already exists
-                                //     ScaffoldMessenger.of(context).showSnackBar(
-                                //       const SnackBar(
-                                //         content: Text("User Already Exists"),
-                                //         duration: Duration(seconds: 2),
-                                //       ),
-                                //     );
-                                //   } else {
-                                //     // Add new data to the Hive box using 'put' for unique key-based storage
-                                //     nutritionBox.put(userData!['name'], newData); // Use 'put' with the user's name as key
-                                //     print('Data added to Hive: ${newData.name}'); // Debug output
-                                //   }
-                                // },
                                 onPressed: () {
                                   // Safely access the first value in the list, fallback to 0 if null
                                   final kcal = calculationResults?['Calorie']?.first ?? 0;

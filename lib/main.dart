@@ -11,6 +11,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(UserNutritionAdapter());
+  Hive.registerAdapter(AddMealBoxAdapter());  // Register AddMealBox adapter
   nutritionBox = await Hive.openBox<UserNutrition>('userNutrition');
   mealBox = await Hive.openBox<AddMealBox>('addmealBox');
 
