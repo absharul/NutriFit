@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:nutrifit/Hive/Box/boxes.dart';
+import '../Hive/UserNutrition/user_nutrition.dart';
 import '../Widgets/User_Form/user_info_widget.dart';
 
 class CheckScreen extends ConsumerStatefulWidget {
@@ -12,7 +13,6 @@ class CheckScreen extends ConsumerStatefulWidget {
 }
 
 class _CheckScreenState extends ConsumerState<CheckScreen> {
-
   Map<String, dynamic>? userData;
   Map<String, List<int>>? calculationResults;
 
@@ -44,16 +44,14 @@ class _CheckScreenState extends ConsumerState<CheckScreen> {
                 ),
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.9,
-                  height: 185,  // Adjusted height to fit the table
+                  height: 185, // Adjusted height to fit the table
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Stack(
                       children: [
-                        // Column for greeting and table content
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Displaying the greeting message with the name
                             Text(
                               'Hello, ${userData!['name']}! You need to consume:',
                               style: GoogleFonts.inter(
@@ -64,13 +62,12 @@ class _CheckScreenState extends ConsumerState<CheckScreen> {
                             ),
                             const SizedBox(height: 10),
 
-                            // Table with "Calories" and "Protein" as header
+                            // Table with Calories and Protein
                             Table(
                               children: [
-                                // Header row for the table
                                 TableRow(
                                   decoration: BoxDecoration(
-                                    color: Colors.grey[200],  // Background color for header row
+                                    color: Colors.grey[200],
                                   ),
                                   children: [
                                     Center(
@@ -101,14 +98,13 @@ class _CheckScreenState extends ConsumerState<CheckScreen> {
                                     ),
                                   ],
                                 ),
-                                // Data row for the table
                                 TableRow(
                                   children: [
                                     Center(
                                       child: Padding(
                                         padding: const EdgeInsets.all(5.0),
                                         child: Text(
-                                          '${calculationResults!['Calorie']?.join(' - ')}',
+                                          '${calculationResults!['Calorie']?.first ?? 0}', // Get the first value from the list
                                           style: const TextStyle(
                                             fontSize: 20,
                                             color: Colors.orange,
@@ -121,7 +117,7 @@ class _CheckScreenState extends ConsumerState<CheckScreen> {
                                       child: Padding(
                                         padding: const EdgeInsets.all(5.0),
                                         child: Text(
-                                          '${calculationResults!['Protein']?.join(' - ')}',
+                                          '${calculationResults!['Protein']?.first ?? 0}', // Get the first value from the list
                                           style: const TextStyle(
                                             fontSize: 20,
                                             color: Colors.green,
@@ -138,13 +134,70 @@ class _CheckScreenState extends ConsumerState<CheckScreen> {
                               child: ElevatedButton(
                                 style: ButtonStyle(
                                   backgroundColor: WidgetStateProperty.all<Color>(Colors.blue),
-                                  minimumSize: WidgetStateProperty.all(Size(0, 0)),
-                                  maximumSize: WidgetStateProperty.all(Size(150, 30))
+                                  minimumSize: WidgetStateProperty.all(const Size(0, 0)),
+                                  maximumSize: WidgetStateProperty.all(const Size(150, 30)),
                                 ),
-                                  onPressed: (){},
-                                  child: const Center(
-                                    child: Text("Save", style: TextStyle(color: Colors.white),),
+                                // onPressed: () {
+                                //   // Safely access the first value in the list, fallback to 0 if null
+                                //   final kcal = calculationResults?['Calorie']?.first ?? 0;
+                                //   final protein = calculationResults?['Protein']?.first.toDouble() ?? 0.0;
+                                //
+                                //   // Create a new UserNutrition instance
+                                //   final newData = UserNutrition(
+                                //     name: userData!['name']?.trim() ?? 'Unnamed user',
+                                //     kcal: kcal,
+                                //     protein: protein,
+                                //   );
+                                //
+                                //   // Check if the user already exists in the box by their name (using 'put' to store by key)
+                                //   if (nutritionBox.containsKey(userData!['name'])) {
+                                //     // Show SnackBar if the user already exists
+                                //     ScaffoldMessenger.of(context).showSnackBar(
+                                //       const SnackBar(
+                                //         content: Text("User Already Exists"),
+                                //         duration: Duration(seconds: 2),
+                                //       ),
+                                //     );
+                                //   } else {
+                                //     // Add new data to the Hive box using 'put' for unique key-based storage
+                                //     nutritionBox.put(userData!['name'], newData); // Use 'put' with the user's name as key
+                                //     print('Data added to Hive: ${newData.name}'); // Debug output
+                                //   }
+                                // },
+                                onPressed: () {
+                                  // Safely access the first value in the list, fallback to 0 if null
+                                  final kcal = calculationResults?['Calorie']?.first ?? 0;
+                                  final protein = calculationResults?['Protein']?.first.toDouble() ?? 0.0;
+                                  String userId = userData!['name'] ?? DateTime.now().toString();
+                                  // Create a new UserNutrition instance
+                                  final newData = UserNutrition(
+                                    id: userId,
+                                    name: userData!['name']?.trim() ?? 'Unnamed User', // Trim any spaces in the name
+                                    kcal: kcal,
+                                    protein: protein,
+                                  );
+
+                                  // Check if the user already exists in the box by their name (using 'put' to store by key)
+                                  if (nutritionBox.containsKey(newData.name)) {
+                                    // Show SnackBar if the user already exists
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text("User Already Exists"),
+                                        duration: Duration(seconds: 2),
+                                      ),
+                                    );
+                                  } else {
+                                    // Add new data to the Hive box using 'put' for unique key-based storage
+                                    nutritionBox.put(newData.name, newData); // Use 'put' with the user's name as key
+                                    print('Data added to Hive: ${newData.name}'); // Debug output
+                                  }
+                                },
+                                child: const Center(
+                                  child: Text(
+                                    "SET GOAL",
+                                    style: TextStyle(color: Colors.white),
                                   ),
+                                ),
                               ),
                             ),
                           ],
@@ -154,7 +207,6 @@ class _CheckScreenState extends ConsumerState<CheckScreen> {
                   ),
                 ),
               ),
-
             ],
           ],
         ),

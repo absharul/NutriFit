@@ -46,10 +46,10 @@ class MealSection extends StatelessWidget {
                 ),
               ),
               Table(
-                border: TableBorder.all(
-                  color: Colors.black.withOpacity(0.5),
-                  width: 1,
-                ),
+                // border: TableBorder.all(
+                //   color: Colors.black.withOpacity(0.5),
+                //   width: 1,
+                // ),
                 columnWidths: const {
                   0: FlexColumnWidth(3),
                   1: FlexColumnWidth(1),

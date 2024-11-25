@@ -2,11 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nutrifit/Hive/Box/boxes.dart';
+import 'package:nutrifit/Screens/about_us_screen.dart';
 import 'package:nutrifit/Screens/check_screen.dart';
 import 'package:nutrifit/Screens/meal_screen.dart';
-import 'package:nutrifit/Screens/profile_screen.dart';
 import 'package:nutrifit/Screens/progress_screen.dart';
 import 'package:nutrifit/Screens/workout_screen.dart';
+import '../Hive/UserNutrition/user_nutrition.dart';
 import '../Widgets/User_Form/add_meal_dialog.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -24,7 +26,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
     const HomeScreen(),  // This will be where the TabBar is
     const WorkoutScreen(),
     const ProgressScreen(),
-    const ProfileScreen(),
+    const AboutUsScreen()
   ];
 
   @override
@@ -34,10 +36,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
   }
 
   void _showAddMealDialog() {
+    UserNutrition currentUser = nutritionBox.getAt(0);
     showDialog(
       context: context,
       builder: (context) {
-        return AddMealDialog();
+        return AddMealDialog(userNutrition: currentUser,);
       },
     );
   }
@@ -130,7 +133,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
             // Profile Button
             _buildBottomNavItem(
               icon: Icons.person,
-              label: 'Profile',
+              label: 'About us',
               index: 3,
             ),
           ],
