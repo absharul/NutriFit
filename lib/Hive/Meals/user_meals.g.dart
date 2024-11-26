@@ -20,19 +20,22 @@ class AddMealBoxAdapter extends TypeAdapter<AddMealBox> {
       mealname: fields[0] as String,
       kcal: fields[1] as int,
       protein: fields[2] as double,
+      timestamp: fields[3] as DateTime,
     );
   }
 
   @override
   void write(BinaryWriter writer, AddMealBox obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.mealname)
       ..writeByte(1)
       ..write(obj.kcal)
       ..writeByte(2)
-      ..write(obj.protein);
+      ..write(obj.protein)
+      ..writeByte(3)
+      ..write(obj.timestamp);
   }
 
   @override

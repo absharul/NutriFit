@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
 import '../Hive/UserNutrition/user_nutrition.dart'; // Import your UserNutrition class
 import '../Hive/Meals/user_meals.dart'; // Import your AddMealBox class for meals
+import 'package:intl/intl.dart';
 
 class ProgressScreen extends StatefulWidget {
   const ProgressScreen({super.key});
@@ -37,15 +37,17 @@ class _ProgressScreenState extends State<ProgressScreen> {
     if (user != null) {
       // Open the meal box for the selected user
       try {
-        mealBox = await Hive.openBox<AddMealBox>(user.id); // Use user ID to get their specific meal box
+        mealBox = await Hive.openBox<AddMealBox>(
+            user.id); // Use user ID to get their specific meal box
 
         // Calculate the total kcal and protein after the box is opened
         setState(() {
           totalKcal = mealBox!.values.fold(0, (sum, meal) => sum + meal.kcal);
-          totalProtein = mealBox!.values.fold(0, (sum, meal) => sum + meal.protein);
+          totalProtein =
+              mealBox!.values.fold(0, (sum, meal) => sum + meal.protein);
         });
       } catch (e) {
-        print("Error opening meal box for user ${user.id}: $e");
+        debugPrint("Error opening meal box for user ${user.id}: $e");
       }
     }
   }
@@ -94,7 +96,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                     color: Colors.black87,
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 DropdownButton<UserNutrition>(
                   hint: const Text('Select a user'),
                   value: selectedUser,
@@ -107,7 +109,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                     );
                   }).toList(),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 // Display selected user's nutritional information
                 if (selectedUser != null) ...[
@@ -130,9 +132,9 @@ class _ProgressScreenState extends State<ProgressScreen> {
                               color: Colors.black87,
                             ),
                           ),
-                          SizedBox(height: 12),
+                          const SizedBox(height: 12),
                           Table(
-                            columnWidths: {
+                            columnWidths: const {
                               0: FlexColumnWidth(2),
                               1: FlexColumnWidth(2),
                             },
@@ -202,7 +204,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
 
                           // Display total calories and protein consumed
                           Text(
@@ -225,7 +227,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                   ),
 
                   // Display the meals for the selected user
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Text(
                     "Meals:",
                     style: GoogleFonts.inter(
@@ -234,13 +236,43 @@ class _ProgressScreenState extends State<ProgressScreen> {
                       color: Colors.black87,
                     ),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   // List the meals for the selected user
+                  // Expanded(
+                  //   child: ListView.builder(
+                  //     itemCount: mealBox?.length ?? 0, // Handle null safely
+                  //     itemBuilder: (context, index) {
+                  //       final meal = mealBox?.getAt(index);
+                  //       return Card(
+                  //         margin: const EdgeInsets.symmetric(vertical: 5),
+                  //         elevation: 4,
+                  //         shape: RoundedRectangleBorder(
+                  //           borderRadius: BorderRadius.circular(12),
+                  //         ),
+                  //         child: ListTile(
+                  //           title: Text(meal?.mealname ?? ''),
+                  //           subtitle: Text(
+                  //               'Calories: ${meal?.kcal}, Protein: ${meal?.protein}g'),
+                  //         ),
+                  //       );
+                  //     },
+                  //   ),
+                  // ),// Import for date formatting
                   Expanded(
                     child: ListView.builder(
                       itemCount: mealBox?.length ?? 0, // Handle null safely
                       itemBuilder: (context, index) {
                         final meal = mealBox?.getAt(index);
+                        if (meal == null)
+                          return SizedBox(); // Handle null meal data
+
+                        // Format the timestamp if available
+                        String formattedDate = '';
+                        if (meal.timestamp != null) {
+                          formattedDate = DateFormat('dd MMM h:mm a')
+                              .format(meal.timestamp!);
+                        }
+
                         return Card(
                           margin: const EdgeInsets.symmetric(vertical: 5),
                           elevation: 4,
@@ -248,9 +280,27 @@ class _ProgressScreenState extends State<ProgressScreen> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: ListTile(
-                            title: Text(meal?.mealname ?? ''),
+                            title: Stack(
+                              children: [
+                                Text(meal.mealname ?? '',
+                                    style: GoogleFonts.inter(fontSize: 16)),
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: Text(
+                                    formattedDate, // Display formatted date
+                                    style: GoogleFonts.inter(
+                                      fontSize: 12,
+                                      color: Colors.grey[700],
+                                      fontStyle: FontStyle.italic,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                             subtitle: Text(
-                                'Calories: ${meal?.kcal}, Protein: ${meal?.protein}g'),
+                                'Calories: ${meal.kcal}, Protein: ${meal.protein}g',
+                                style: GoogleFonts.inter(fontSize: 14)),
                           ),
                         );
                       },

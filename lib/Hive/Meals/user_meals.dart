@@ -13,5 +13,13 @@ class AddMealBox extends HiveObject {
   @HiveField(2)
   double protein;
 
-  AddMealBox({required this.mealname, required this.kcal, required this.protein});
+  @HiveField(3)
+  DateTime timestamp; // Add the timestamp field
+
+  AddMealBox({
+    required this.mealname,
+    required this.kcal,
+    required this.protein,
+    required this.timestamp, // Initialize the timestamp in constructor
+  });
 }

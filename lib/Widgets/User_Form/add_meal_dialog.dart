@@ -225,7 +225,7 @@ class _AddMealDialogState extends State<AddMealDialog> {
                   final protein = double.parse(_proteinController.text);
 
                   // Create a new AddMealBox object
-                  final newMeal = AddMealBox(mealname: mealName, kcal: kcal, protein: protein);
+                  final newMeal = AddMealBox(mealname: mealName, kcal: kcal, protein: protein, timestamp: DateTime.now());
 
                   if (selectedUser != null) {
                     // Open the user's specific meal box
