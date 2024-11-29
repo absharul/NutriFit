@@ -108,22 +108,22 @@ class NutritionGoalCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 5.0),
             Text(
-              'Total Calories Consumed Today: $totalKcalToday kcal',
+              'Total kcal consumed Today: $totalKcalToday',
               style: GoogleFonts.inter(
                 fontSize: 16,
                 color: Colors.orange,
               ),
             ),
             Text(
-              'Total Protein Consumed Today: $totalProteinToday g',
+              'Total Protein consumed Today: $totalProteinToday g',
               style: GoogleFonts.inter(
                 fontSize: 16,
                 color: Colors.green,
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
           ],
         ),
       ),

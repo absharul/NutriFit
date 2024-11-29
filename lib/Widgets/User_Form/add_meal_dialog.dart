@@ -225,7 +225,12 @@ class _AddMealDialogState extends State<AddMealDialog> {
                   final protein = double.parse(_proteinController.text);
 
                   // Create a new AddMealBox object
-                  final newMeal = AddMealBox(mealname: mealName, kcal: kcal, protein: protein, timestamp: DateTime.now());
+                  final newMeal = AddMealBox(
+                    mealname: mealName,
+                    kcal: kcal,
+                    protein: protein,
+                    timestamp: DateTime.now(),
+                  );
 
                   if (selectedUser != null) {
                     // Open the user's specific meal box
@@ -234,8 +239,20 @@ class _AddMealDialogState extends State<AddMealDialog> {
                     // Add the meal to the user-specific meal box
                     await userMealBox.add(newMeal);
 
-                    // Optionally, you can return the meal data if needed
-                    print('Meal added: $mealName, Calories: $kcal, Protein: $protein');
+                    // Show custom Snackbar
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'Meal added successfully!',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        backgroundColor: Colors.green, // Green background
+                        duration: Duration(seconds: 2), // Snackbar duration
+                        behavior: SnackBarBehavior.fixed, // Keeps the Snackbar at the bottom
+                        shape: RoundedRectangleBorder(// Optional rounded corners
+                        ),
+                      ),
+                    );
 
                     Navigator.of(context).pop(); // Close the dialog after saving
                   }
@@ -246,12 +263,15 @@ class _AddMealDialogState extends State<AddMealDialog> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               ),
-              child: const Text('Add',
-                  style: TextStyle(fontSize: 16, color: Colors.black)),
+              child: const Text(
+                'Add',
+                style: TextStyle(fontSize: 16, color: Colors.black),
+              ),
             ),
+
+
           ],
         ),
       ],

@@ -158,9 +158,9 @@ class _ProgressScreenState extends State<ProgressScreen> {
       if (dailyKcal >= user.kcal && dailyProtein >= user.protein) {
         return "Goal Achieved!";
       } else if (dailyKcal >= user.kcal && dailyProtein < user.protein) {
-        return "You're losing muscle!";
+        return "Low Protein";
       } else if (dailyKcal < user.kcal && dailyProtein >= user.protein) {
-        return "You're losing energy!";
+        return "Low kcal";
       } else {
         return "Keep going";
       }
