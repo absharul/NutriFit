@@ -25,7 +25,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
   final List<Widget> _bottomNavScreens = [
     const HomeScreen(),  // This will be where the TabBar is
     const WorkoutScreen(),
-    const ProgressScreen(),
+    MealSection(),
     const AboutUsScreen()
   ];
 
@@ -79,8 +79,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
           unselectedLabelColor: Colors.white,
           labelColor: Colors.white,
           tabs: const [
-            Tab(text: 'Check'), // First Tab
-            Tab(text: 'Meals'), // Second Tab
+            Tab(text: 'Progress'), // First Tab
+            Tab(text: 'Calculator'), // Second Tab
           ],
         ),
       )
@@ -88,9 +88,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
       body: _selectedBottomNavIndex == 0
           ? TabBarView(
         controller: _tabController,
-        children: [
-          const CheckScreen(),
-          MealSection(),
+        children: const [
+          ProgressScreen(),
+          CheckScreen(),
+          // MealSection(),
         ],
       )
           : _bottomNavScreens[_selectedBottomNavIndex], // Show other screens based on BottomNav selection
@@ -126,8 +127,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
             const SizedBox(width: 48), // Space for the FAB
             // Progress Button
             _buildBottomNavItem(
-              icon: Icons.bar_chart,
-              label: 'Progress',
+              icon: Icons.fastfood,
+              label: 'Meals',
               index: 2,
             ),
             // Profile Button

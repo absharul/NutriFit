@@ -75,18 +75,6 @@ class _ProgressScreenState extends State<ProgressScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: Text(
-          "NutriFit",
-          style: GoogleFonts.inter(
-            fontSize: 40,
-            color: Colors.white,
-            fontStyle: FontStyle.italic,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ValueListenableBuilder(
@@ -119,7 +107,14 @@ class _ProgressScreenState extends State<ProgressScreen> {
                       totalKcalToday: totalKcalToday,
                       totalProteinToday: totalProteinToday,
                     ),
-                    const SizedBox(height: 20),
+                    Padding(
+                       padding: EdgeInsets.only(left: 10.0,top: 10.0),
+                        child: Text('Records', style: GoogleFonts.inter(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),),
+                    ),
                     MessageDisplay(
                       message: message,
                       messageColor: messageColor,
