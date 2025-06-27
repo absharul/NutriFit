@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:nutrifit/Hive/Box/boxes.dart';
 import '../../Hive/Meals/user_meals.dart';
 import '../../Hive/UserNutrition/user_nutrition.dart';
 
 class AddMealDialog extends StatefulWidget {
-  final UserNutrition userNutrition; // The user for which we are adding meals
-
-  AddMealDialog({required this.userNutrition});
+  final UserNutrition userNutrition;
+  const AddMealDialog({super.key, required this.userNutrition});
 
   @override
   _AddMealDialogState createState() => _AddMealDialogState();
@@ -20,31 +18,28 @@ class _AddMealDialogState extends State<AddMealDialog> {
 
   final _formKey = GlobalKey<FormState>();
 
-  UserNutrition? selectedUser; // Variable to hold selected user
-  List<UserNutrition> usersList = []; // List of all users from Hive
-
+  UserNutrition? selectedUser;
+  List<UserNutrition> usersList = [];
   @override
   void initState() {
     super.initState();
     _loadUsers();
   }
 
-  // Load users from the Hive box
   Future<void> _loadUsers() async {
     var userBox = await Hive.openBox<UserNutrition>('userNutrition');
     setState(() {
       usersList = userBox.values.toList();
-      selectedUser = widget.userNutrition; // Default to the passed user
+      selectedUser = widget.userNutrition;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: Colors.black87, // Slightly lighter black for contrast
+      backgroundColor: Colors.black87,
       shape: RoundedRectangleBorder(
-        borderRadius:
-            BorderRadius.circular(20.0), // More rounded edges for a modern look
+        borderRadius: BorderRadius.circular(20.0),
       ),
       title: const Text(
         'Add New Meal',
@@ -59,7 +54,6 @@ class _AddMealDialogState extends State<AddMealDialog> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Dropdown to select user
             Padding(
                 padding: const EdgeInsets.only(bottom: 16.0),
                 child: usersList.isEmpty
@@ -76,30 +70,26 @@ class _AddMealDialogState extends State<AddMealDialog> {
                             value: user,
                             child: Text(
                               user.name,
-                              style: TextStyle(
-                                  color: Colors
-                                      .white), // Text color for each dropdown item
+                              style: const TextStyle(color: Colors.white),
                             ),
                           );
                         }).toList(),
                         decoration: InputDecoration(
                           labelText: 'Select User',
-                          labelStyle: TextStyle(color: Colors.white),
+                          labelStyle: const TextStyle(color: Colors.white),
                           hintText: 'Choose the user',
-                          hintStyle: TextStyle(color: Colors.white60),
+                          hintStyle: const TextStyle(color: Colors.white60),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: Colors.blueAccent),
+                            borderSide:
+                                const BorderSide(color: Colors.blueAccent),
                           ),
-                          contentPadding: EdgeInsets.symmetric(
+                          contentPadding: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 12),
                         ),
-                        style: TextStyle(
-                            color: Colors.white), // Selected item text color
-                        iconEnabledColor:
-                            Colors.white, // Set icon color to white
-                        dropdownColor: Colors
-                            .black, // Set dropdown background color to black
+                        style: const TextStyle(color: Colors.white),
+                        iconEnabledColor: Colors.white,
+                        dropdownColor: Colors.black,
                         validator: (value) {
                           if (value == null) {
                             return 'Please select a user';
@@ -107,24 +97,23 @@ class _AddMealDialogState extends State<AddMealDialog> {
                           return null;
                         },
                       )),
-            // Meal name field
             Padding(
               padding: const EdgeInsets.only(bottom: 16.0),
               child: TextFormField(
                 controller: _mealController,
                 decoration: InputDecoration(
                   labelText: 'Meal Name',
-                  labelStyle: TextStyle(color: Colors.white),
+                  labelStyle: const TextStyle(color: Colors.white),
                   hintText: 'Enter the name of the meal',
-                  hintStyle: TextStyle(color: Colors.white60),
+                  hintStyle: const TextStyle(color: Colors.white60),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: Colors.blueAccent),
+                    borderSide: const BorderSide(color: Colors.blueAccent),
                   ),
                   contentPadding:
-                      EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
-                style: TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a meal name';
@@ -133,7 +122,6 @@ class _AddMealDialogState extends State<AddMealDialog> {
                 },
               ),
             ),
-            // Calories field
             Padding(
               padding: const EdgeInsets.only(bottom: 16.0),
               child: TextFormField(
@@ -141,17 +129,17 @@ class _AddMealDialogState extends State<AddMealDialog> {
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   labelText: 'Calories',
-                  labelStyle: TextStyle(color: Colors.white),
+                  labelStyle: const TextStyle(color: Colors.white),
                   hintText: 'Enter calories',
-                  hintStyle: TextStyle(color: Colors.white60),
+                  hintStyle: const TextStyle(color: Colors.white60),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: Colors.blueAccent),
+                    borderSide: const BorderSide(color: Colors.blueAccent),
                   ),
                   contentPadding:
-                      EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
-                style: TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter calories';
@@ -163,7 +151,6 @@ class _AddMealDialogState extends State<AddMealDialog> {
                 },
               ),
             ),
-            // Protein field
             Padding(
               padding: const EdgeInsets.only(bottom: 16.0),
               child: TextFormField(
@@ -202,7 +189,7 @@ class _AddMealDialogState extends State<AddMealDialog> {
           children: [
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.redAccent,
@@ -219,12 +206,10 @@ class _AddMealDialogState extends State<AddMealDialog> {
             ElevatedButton(
               onPressed: () async {
                 if (_formKey.currentState?.validate() ?? false) {
-                  // Retrieve entered values
                   final mealName = _mealController.text;
                   final kcal = int.parse(_kcalController.text);
                   final protein = double.parse(_proteinController.text);
 
-                  // Create a new AddMealBox object
                   final newMeal = AddMealBox(
                     mealname: mealName,
                     kcal: kcal,
@@ -233,28 +218,25 @@ class _AddMealDialogState extends State<AddMealDialog> {
                   );
 
                   if (selectedUser != null) {
-                    // Open the user's specific meal box
-                    var userMealBox = await Hive.openBox<AddMealBox>(selectedUser!.id);
+                    var userMealBox =
+                        await Hive.openBox<AddMealBox>(selectedUser!.id);
 
-                    // Add the meal to the user-specific meal box
                     await userMealBox.add(newMeal);
 
-                    // Show custom Snackbar
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text(
                           'Meal added successfully!',
                           style: TextStyle(color: Colors.white),
                         ),
-                        backgroundColor: Colors.green, // Green background
-                        duration: Duration(seconds: 2), // Snackbar duration
-                        behavior: SnackBarBehavior.fixed, // Keeps the Snackbar at the bottom
-                        shape: RoundedRectangleBorder(// Optional rounded corners
-                        ),
+                        backgroundColor: Colors.green,
+                        duration: Duration(seconds: 2),
+                        behavior: SnackBarBehavior.fixed,
+                        shape: RoundedRectangleBorder(),
                       ),
                     );
 
-                    Navigator.of(context).pop(); // Close the dialog after saving
+                    Navigator.of(context).pop();
                   }
                 }
               },
@@ -263,15 +245,14 @@ class _AddMealDialogState extends State<AddMealDialog> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               ),
               child: const Text(
                 'Add',
                 style: TextStyle(fontSize: 16, color: Colors.black),
               ),
             ),
-
-
           ],
         ),
       ],

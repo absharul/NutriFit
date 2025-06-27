@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -18,7 +17,11 @@ class MealSection extends StatelessWidget {
     {"meal": "Chicken Korma", "protein": 21.0, "calories": 250},
     {"meal": "Aloo Gobi", "protein": 2.0, "calories": 80},
     {"meal": "Egg Curry", "protein": 12.0, "calories": 170},
-    {"meal": "Macher Jhol (Bengali Fish Curry)", "protein": 22.0, "calories": 130},
+    {
+      "meal": "Macher Jhol (Bengali Fish Curry)",
+      "protein": 22.0,
+      "calories": 130
+    },
     {"meal": "Mutton Rogan Josh", "protein": 25.0, "calories": 280},
     {"meal": "Rajma (Kidney Bean Curry)", "protein": 8.0, "calories": 127},
     {"meal": "Paneer Butter Masala", "protein": 16.0, "calories": 290},
@@ -59,10 +62,7 @@ class MealSection extends StatelessWidget {
                 ),
               ),
               Table(
-                // border: TableBorder.all(
-                //   color: Colors.black.withOpacity(0.5),
-                //   width: 1,
-                // ),
+        
                 columnWidths: const {
                   0: FlexColumnWidth(3),
                   1: FlexColumnWidth(1),

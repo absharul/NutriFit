@@ -17,7 +17,6 @@ class ProgressScreen extends StatefulWidget {
   State<ProgressScreen> createState() => _ProgressScreenState();
 }
 
-
 class _ProgressScreenState extends State<ProgressScreen> {
   late Box<UserNutrition> nutritionBox;
   Box<AddMealBox>? mealBox;
@@ -49,22 +48,24 @@ class _ProgressScreenState extends State<ProgressScreen> {
         mealBox = await Hive.openBox<AddMealBox>(user.id);
         setState(() {
           totalKcalToday = mealBox?.values.fold(0, (sum, meal) {
-            if (meal.timestamp.year == DateTime.now().year &&
-                meal.timestamp.month == DateTime.now().month &&
-                meal.timestamp.day == DateTime.now().day) {
-              return sum! + meal.kcal;
-            }
-            return sum;
-          }) ?? 0;
+                if (meal.timestamp.year == DateTime.now().year &&
+                    meal.timestamp.month == DateTime.now().month &&
+                    meal.timestamp.day == DateTime.now().day) {
+                  return sum! + meal.kcal;
+                }
+                return sum;
+              }) ??
+              0;
 
           totalProteinToday = mealBox?.values.fold(0, (sum, meal) {
-            if (meal.timestamp.year == DateTime.now().year &&
-                meal.timestamp.month == DateTime.now().month &&
-                meal.timestamp.day == DateTime.now().day) {
-              return sum! + meal.protein;
-            }
-            return sum;
-          }) ?? 0;
+                if (meal.timestamp.year == DateTime.now().year &&
+                    meal.timestamp.month == DateTime.now().month &&
+                    meal.timestamp.day == DateTime.now().day) {
+                  return sum! + meal.protein;
+                }
+                return sum;
+              }) ??
+              0;
         });
       } catch (e) {
         debugPrint("Error opening meal box for user ${user.id}: $e");
@@ -108,12 +109,15 @@ class _ProgressScreenState extends State<ProgressScreen> {
                       totalProteinToday: totalProteinToday,
                     ),
                     Padding(
-                       padding: EdgeInsets.only(left: 10.0,top: 10.0),
-                        child: Text('Records', style: GoogleFonts.inter(
+                      padding: const EdgeInsets.only(left: 10.0, top: 10.0),
+                      child: Text(
+                        'Records',
+                        style: GoogleFonts.inter(
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
                           color: Colors.black87,
-                        ),),
+                        ),
+                      ),
                     ),
                     MessageDisplay(
                       message: message,
@@ -123,12 +127,16 @@ class _ProgressScreenState extends State<ProgressScreen> {
                       final date = entry.key;
                       final meals = entry.value;
 
-                      double dailyKcal = meals.fold(0, (sum, meal) => sum + meal.kcal);
-                      double dailyProtein = meals.fold(0, (sum, meal) => sum + meal.protein);
+                      double dailyKcal =
+                          meals.fold(0, (sum, meal) => sum + meal.kcal);
+                      double dailyProtein =
+                          meals.fold(0, (sum, meal) => sum + meal.protein);
 
-                      bool isCurrentDay = DateFormat.yMMMd().format(DateTime.now()) == date;
+                      bool isCurrentDay =
+                          DateFormat.yMMMd().format(DateTime.now()) == date;
 
-                      String dailyMessage = checkAchievement(dailyKcal, dailyProtein, selectedUser!, isCurrentDay);
+                      String dailyMessage = checkAchievement(
+                          dailyKcal, dailyProtein, selectedUser!, isCurrentDay);
 
                       return MealGroupCard(
                         date: date,
@@ -148,7 +156,8 @@ class _ProgressScreenState extends State<ProgressScreen> {
     );
   }
 
-  String checkAchievement(double dailyKcal, double dailyProtein, UserNutrition user, bool isCurrentDay) {
+  String checkAchievement(double dailyKcal, double dailyProtein,
+      UserNutrition user, bool isCurrentDay) {
     if (isCurrentDay) {
       if (dailyKcal >= user.kcal && dailyProtein >= user.protein) {
         return "Goal Achieved!";
@@ -167,10 +176,10 @@ class _ProgressScreenState extends State<ProgressScreen> {
       }
     }
   }
+
   // Group meals by date
   Map<String, List<AddMealBox>> _groupMealsByDate() {
     final groupedMeals = <String, List<AddMealBox>>{};
-    final today = DateTime.now();
 
     if (mealBox == null) return groupedMeals;
 

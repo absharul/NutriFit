@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,12 +17,13 @@ class HomeScreen extends ConsumerStatefulWidget {
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProviderStateMixin {
-  int _selectedBottomNavIndex = 0; // Tracks BottomNavBar selection
+class _HomeScreenState extends ConsumerState<HomeScreen>
+    with SingleTickerProviderStateMixin {
+  int _selectedBottomNavIndex = 0;
   late TabController _tabController;
 
   final List<Widget> _bottomNavScreens = [
-    const HomeScreen(),  // This will be where the TabBar is
+    const HomeScreen(),
     const WorkoutScreen(),
     MealSection(),
     const AboutUsScreen()
@@ -32,7 +32,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this); // 2 Tabs for HomeScreen
+    _tabController = TabController(length: 2, vsync: this);
   }
 
   void _showAddMealDialog() {
@@ -40,7 +40,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
     showDialog(
       context: context,
       builder: (context) {
-        return AddMealDialog(userNutrition: currentUser,);
+        return AddMealDialog(
+          userNutrition: currentUser,
+        );
       },
     );
   }
@@ -62,39 +64,38 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
     return Scaffold(
       appBar: _selectedBottomNavIndex == 0
           ? AppBar(
-        backgroundColor: Colors.black,
-        title: Text(
-          "NutriFit",
-          style: GoogleFonts.inter(
-              fontSize: 40,
-              color: Colors.white,
-              fontStyle: FontStyle.italic,
-              fontWeight: FontWeight.bold),
-        ),
-        bottom: TabBar(
-          controller: _tabController,
-          indicatorWeight: 3.0,
-          indicatorColor: Colors.yellowAccent,
-          indicatorSize: TabBarIndicatorSize.tab,
-          unselectedLabelColor: Colors.white,
-          labelColor: Colors.white,
-          tabs: const [
-            Tab(text: 'Progress'), // First Tab
-            Tab(text: 'Calculator'), // Second Tab
-          ],
-        ),
-      )
-          : null, // No AppBar when not on HomeScreen
+              backgroundColor: Colors.black,
+              title: Text(
+                "NutriFit",
+                style: GoogleFonts.inter(
+                    fontSize: 40,
+                    color: Colors.white,
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.bold),
+              ),
+              bottom: TabBar(
+                controller: _tabController,
+                indicatorWeight: 3.0,
+                indicatorColor: Colors.yellowAccent,
+                indicatorSize: TabBarIndicatorSize.tab,
+                unselectedLabelColor: Colors.white,
+                labelColor: Colors.white,
+                tabs: const [
+                  Tab(text: 'Progress'),
+                  Tab(text: 'Calculator'),
+                ],
+              ),
+            )
+          : null,
       body: _selectedBottomNavIndex == 0
           ? TabBarView(
-        controller: _tabController,
-        children: const [
-          ProgressScreen(),
-          CheckScreen(),
-          // MealSection(),
-        ],
-      )
-          : _bottomNavScreens[_selectedBottomNavIndex], // Show other screens based on BottomNav selection
+              controller: _tabController,
+              children: const [
+                ProgressScreen(),
+                CheckScreen(),
+              ],
+            )
+          : _bottomNavScreens[_selectedBottomNavIndex],
       floatingActionButton: FloatingActionButton(
         onPressed: _showAddMealDialog,
         shape: const CircleBorder(),
@@ -112,26 +113,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            // Home Button
             _buildBottomNavItem(
               icon: Icons.home,
               label: 'Home',
               index: 0,
             ),
-            // Workout Button
             _buildBottomNavItem(
               icon: Icons.sports_gymnastics_outlined,
               label: 'Workout',
               index: 1,
             ),
-            const SizedBox(width: 48), // Space for the FAB
-            // Progress Button
+            const SizedBox(width: 48),
             _buildBottomNavItem(
               icon: Icons.fastfood,
               label: 'Meals',
               index: 2,
             ),
-            // Profile Button
             _buildBottomNavItem(
               icon: Icons.person,
               label: 'About us',

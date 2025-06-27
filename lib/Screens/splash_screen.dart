@@ -12,12 +12,10 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
- @override
+  @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    Timer( Duration(seconds: 3), () {
+    Timer(const Duration(seconds: 3), () {
       context.go('/homescreen');
     });
   }
@@ -27,13 +25,15 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: Center(
-          child: Text("NutriFit", style: GoogleFonts.inter(
-            fontSize: 40,
-            color: Colors.white,
-            fontStyle: FontStyle.italic,
-            fontWeight: FontWeight.bold
-          ),),
+        child: Text(
+          "NutriFit",
+          style: GoogleFonts.inter(
+              fontSize: 40,
+              color: Colors.white,
+              fontStyle: FontStyle.italic,
+              fontWeight: FontWeight.bold),
         ),
+      ),
     );
   }
 }

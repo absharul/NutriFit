@@ -6,10 +6,10 @@ class MessageDisplay extends StatelessWidget {
   final Color messageColor;
 
   const MessageDisplay({
-    Key? key,
+    super.key,
     required this.message,
     required this.messageColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

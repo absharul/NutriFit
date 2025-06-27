@@ -1,8 +1,7 @@
 import 'package:hive/hive.dart';
 
-part 'user_meals.g.dart'; // For the generated adapter
-
-@HiveType(typeId: 1) // Unique type ID for AddMealBox
+part 'user_meals.g.dart'; 
+@HiveType(typeId: 1) 
 class AddMealBox extends HiveObject {
   @HiveField(0)
   String mealname;
@@ -14,12 +13,11 @@ class AddMealBox extends HiveObject {
   double protein;
 
   @HiveField(3)
-  DateTime timestamp; // Add the timestamp field
-
+  DateTime timestamp; 
   AddMealBox({
     required this.mealname,
     required this.kcal,
     required this.protein,
-    required this.timestamp, // Initialize the timestamp in constructor
+    required this.timestamp, 
   });
 }

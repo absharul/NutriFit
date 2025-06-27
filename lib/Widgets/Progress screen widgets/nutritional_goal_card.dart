@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -10,6 +9,7 @@ class NutritionGoalCard extends StatelessWidget {
   final double totalProteinToday;
 
   const NutritionGoalCard({
+    super.key,
     required this.user,
     required this.totalKcalToday,
     required this.totalProteinToday,

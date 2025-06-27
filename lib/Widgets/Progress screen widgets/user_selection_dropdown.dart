@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -10,11 +9,11 @@ class UserSelectionDropdown extends StatelessWidget {
   final ValueChanged<UserNutrition?> onUserSelected;
 
   const UserSelectionDropdown({
-    Key? key,
+    super.key,
     required this.nutritionList,
     required this.selectedUser,
     required this.onUserSelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -46,4 +45,3 @@ class UserSelectionDropdown extends StatelessWidget {
     );
   }
 }
-
