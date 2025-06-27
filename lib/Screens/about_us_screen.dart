@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -30,7 +29,6 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            // Introduction Section
             Padding(
               padding: const EdgeInsets.only(bottom: 16.0),
               child: Text(
@@ -51,7 +49,6 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
               ),
             ),
 
-            // Terms & Conditions Section
             Padding(
               padding: const EdgeInsets.only(bottom: 16.0),
               child: Text(
@@ -73,7 +70,6 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
             ),
             TextButton(
               onPressed: () {
-                // Navigate to Terms & Conditions page or web link
                 print("Redirecting to Terms & Conditions");
               },
               child: Text(
@@ -82,7 +78,6 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
               ),
             ),
 
-            // Privacy Policy Section
             Padding(
               padding: const EdgeInsets.only(bottom: 16.0),
               child: Text(
@@ -104,7 +99,6 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
             ),
             TextButton(
               onPressed: () {
-                // Navigate to Privacy Policy page or web link
                 print("Redirecting to Privacy Policy");
               },
               child: Text(
@@ -113,7 +107,6 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
               ),
             ),
 
-            // Contact Information Section
             Padding(
               padding: const EdgeInsets.only(bottom: 16.0),
               child: Text(
@@ -135,7 +128,6 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
             ),
             TextButton(
               onPressed: () {
-                // Handle contact action (e.g., navigate to contact form or email)
                 print("Redirecting to contact us page");
               },
               child: Text(
@@ -143,10 +135,8 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
                 style: GoogleFonts.roboto(fontSize: 16, color: Colors.blue),
               ),
             ),
-
-            // Footer Section with Social Media Links
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0),
+            const Padding(
+              padding: EdgeInsets.only(top: 16.0),
               child: Divider(
                 color: Colors.black12,
                 thickness: 1.0,
@@ -158,9 +148,12 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.facebook, color: Colors.blue,size: 30.0,),
+                    icon: const Icon(
+                      Icons.facebook,
+                      color: Colors.blue,
+                      size: 30.0,
+                    ),
                     onPressed: () {
-                      // Handle Facebook link
                       print("Redirecting to Facebook");
                     },
                   ),
@@ -171,7 +164,6 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
                       size: 30.0,
                     ),
                     onPressed: () {
-                      // Handle Twitter link
                       print("Redirecting to Twitter");
                     },
                   ),
@@ -182,7 +174,7 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
                       size: 30.0,
                     ),
                     onPressed: () {
-                      // Handle Instagram link
+              
                       print("Redirecting to Instagram");
                     },
                   ),
@@ -194,7 +186,8 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
               child: Center(
                 child: Text(
                   "© 2024 NutriFit. All rights reserved.",
-                  style: GoogleFonts.roboto(fontSize: 14, color: Colors.black54),
+                  style:
+                      GoogleFonts.roboto(fontSize: 14, color: Colors.black54),
                 ),
               ),
             ),
